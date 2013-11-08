@@ -1,6 +1,6 @@
 # Mono Heroku Buildpack
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Mono that will run [Service Stack](https://github.com/ServiceStack/ServiceStack/) Self hosted APIs on port 8080.
+This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Mono that will run [Service Stack](https://github.com/ServiceStack/ServiceStack/) Self hosted APIs on port 8080. A compatible Service Stack example API can be found here: https://github.com/nover/service-stack-selfhost-heroku
 
 It uses [nginx](http://www.mono-project.com/FastCGI_Nginx) as the web server and runs on Mono 3.2.3. 
 
