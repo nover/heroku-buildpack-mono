@@ -1,10 +1,14 @@
 # Mono Heroku Buildpack
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Mono that will run [ASP.NET](http://friism.com/running-net-on-heroku) and [Katana/OWIN applications](http://friism.com/running-owin-katana-apps-on-heroku).
+This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Mono that will run [Service Stack](https://github.com/ServiceStack/ServiceStack/) Self hosted APIs on port 8080.
 
-It uses [nginx](http://www.mono-project.com/FastCGI_Nginx) as the web server and runs on Mono 3.2.3.
+It uses [nginx](http://www.mono-project.com/FastCGI_Nginx) as the web server and runs on Mono 3.2.3. 
+
+This fork is heavily based on the works of https://github.com/friism/heroku-buildpack-mono and all credit should go to the previous creators of this build pack.
 
 ## Usage
+
+This build pack will _only_ run Service Stack APIs that are running in the [self hosted container](https://github.com/ServiceStack/ServiceStack/wiki/Run-ServiceStack-as-a-daemon-on-Linux) listening on port 8080. Nginx is started on the port specified in the Heroku environment and is using the self hosted container as a reverse proxy.
 
 Additional details and guides:
 
@@ -15,10 +19,10 @@ Additional details and guides:
 
 Example usage:
 
-    $ heroku create --buildpack http://github.com/friism/heroku-buildpack-mono.git
+    $ heroku create --buildpack http://github.com/nover/heroku-buildpack-mono.git
     $ git push heroku master
 
-The buildpack will detect your app as ASP.NET if it has the file `global.asax` in the root or at one directory depth or as .NET if it has a `.sln` file.
+The buildpack will build your solution and launch all .exe files found, so make sure that you only have one exe in your solution.
 
 ## TODO
 
