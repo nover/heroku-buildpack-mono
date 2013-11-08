@@ -7,5 +7,6 @@ BUILD_DIR=$1
 cat <<EOF
 ---
 default_process_types:
-  web: /app/nginx/start
+  web: /app/mono/bin/mono /app/*.exe web
+  worker: /app/mono/bin/mono /app/*.exe worker
 EOF

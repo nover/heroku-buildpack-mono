@@ -85,19 +85,7 @@ cp -r ${BUILD_CACHE_LOCATION}* ${BUILD_DIR}
 
 mkdir -p ${BUILD_DIR}/.profile.d
 cp -n ${LP_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
-echo "-----> Bundling Nginx"
-NGINX_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/nginx-${NGINX_VERSION}.tar.gz"
-NGINX_CACHE_LOCATION=${CACHE_DIR}/nginx-{NGINX_VERSION}
-if [ ! -d "${NGINX_CACHE_LOCATION}" ]; then
-  echo "Fetching ${NGINX_VERSION} @ ${NGINX_PACKAGE_URL}"
-  mkdir -p ${NGINX_CACHE_LOCATION}
-  cd ${NGINX_CACHE_LOCATION}
-  curl ${NGINX_PACKAGE_URL} -s | tar xz
-  cd ${BUILD_DIR}
-fi
 
-mkdir -p ${BUILD_DIR}/nginx
-cp ${NGINX_CACHE_LOCATION}/nginx ${BUILD_DIR}/nginx/.
-cp ${LP_DIR}/nginx/* ${BUILD_DIR}/nginx/.
+cp ${LP_DIR}/start ${BUILD_DIR}/start
 
 echo "-----> Build SUCCESS"
