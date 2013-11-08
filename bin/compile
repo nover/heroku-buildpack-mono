@@ -8,12 +8,10 @@ DEPENDENCY_S3_BUCKET_PATH="http://s3.amazonaws.com/mono-dependencies"
 
 # config
 MONO_VERSION="3.2.3"
-XSP_VERSION="3.0.11"
 NGINX_VERSION="1.5.2"
 
 # s3 packages
 MONO_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/mono-${MONO_VERSION}.tar.gz"
-XSP_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/xsp-${XSP_VERSION}.tar.gz"
 NUGET_TARGETS_FILE_URL="${DEPENDENCY_S3_BUCKET_PATH}/vendor/NuGet/NuGet.targets"
 
 BUILD_DIR=$1
@@ -26,16 +24,6 @@ cd ${BUILD_DIR}
 # cache may not exist yet
 mkdir -p ${CACHE_DIR}
 
-echo "-----> Bundling XSP v${XSP_VERSION}"
-XSP_CACHE_LOCATION=${CACHE_DIR}/xsp-{XSP_VERSION}
-if [ ! -d "${XSP_CACHE_LOCATION}" ]; then
-  echo "Fetching ${XSP_VERSION} @ ${XSP_PACKAGE_URL}"
-  mkdir -p ${XSP_CACHE_LOCATION}
-  cd ${XSP_CACHE_LOCATION}
-  curl ${XSP_PACKAGE_URL} -s | tar xz
-  cd ${BUILD_DIR}
-fi
-
 echo "-----> Bundling Mono v${MONO_VERSION}"
 MONO_CACHE_LOCATION=${CACHE_DIR}/mono-${MONO_VERSION}
 if [ ! -d "${MONO_CACHE_LOCATION}" ]; then
@@ -44,9 +32,6 @@ if [ ! -d "${MONO_CACHE_LOCATION}" ]; then
   cd ${MONO_CACHE_LOCATION}
   curl ${MONO_PACKAGE_URL} -s | tar xz
   cd ${BUILD_DIR}
-
-  echo "Copying xsp libraries to the GAC"
-  cp -r ${XSP_CACHE_LOCATION}/xsp/lib/mono/gac/* ${MONO_CACHE_LOCATION}/mono/lib/mono/gac/
 fi
 
 
@@ -61,8 +46,6 @@ cp -r "${MONO_CACHE_LOCATION}/mono" .
 # TODO: this is done because `ln -s` causes nuget to fail in subtle ways. Fix please
 # ln -s "$BUILD_DIR/mono" /app
 cp -r "${MONO_CACHE_LOCATION}/mono" /app/.
-
-cp -r "${XSP_CACHE_LOCATION}/xsp" .
 
 # find a solution file
 SLN=$(find . -maxdepth 1 -iname "*.sln")
@@ -102,22 +85,19 @@ cp -r ${BUILD_CACHE_LOCATION}* ${BUILD_DIR}
 
 mkdir -p ${BUILD_DIR}/.profile.d
 cp -n ${LP_DIR}/.profile.d/* ${BUILD_DIR}/.profile.d/
-
-if [ -d "$BUILD_DIR/_PublishedWebsites/" ]; then
-  echo "Website detected"
-  NGINX_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/nginx-${NGINX_VERSION}.tar.gz"
-  NGINX_CACHE_LOCATION=${CACHE_DIR}/nginx-{NGINX_VERSION}
-  if [ ! -d "${NGINX_CACHE_LOCATION}" ]; then
-    echo "Fetching ${NGINX_VERSION} @ ${NGINX_PACKAGE_URL}"
-    mkdir -p ${NGINX_CACHE_LOCATION}
-    cd ${NGINX_CACHE_LOCATION}
-    curl ${NGINX_PACKAGE_URL} -s | tar xz
-    cd ${BUILD_DIR}
-  fi
-
-  mkdir -p ${BUILD_DIR}/nginx
-  cp ${NGINX_CACHE_LOCATION}/nginx ${BUILD_DIR}/nginx/.
-  cp ${LP_DIR}/nginx/* ${BUILD_DIR}/nginx/.
+echo "-----> Bundling Nginx"
+NGINX_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/nginx-${NGINX_VERSION}.tar.gz"
+NGINX_CACHE_LOCATION=${CACHE_DIR}/nginx-{NGINX_VERSION}
+if [ ! -d "${NGINX_CACHE_LOCATION}" ]; then
+  echo "Fetching ${NGINX_VERSION} @ ${NGINX_PACKAGE_URL}"
+  mkdir -p ${NGINX_CACHE_LOCATION}
+  cd ${NGINX_CACHE_LOCATION}
+  curl ${NGINX_PACKAGE_URL} -s | tar xz
+  cd ${BUILD_DIR}
 fi
+
+mkdir -p ${BUILD_DIR}/nginx
+cp ${NGINX_CACHE_LOCATION}/nginx ${BUILD_DIR}/nginx/.
+cp ${LP_DIR}/nginx/* ${BUILD_DIR}/nginx/.
 
 echo "-----> Build SUCCESS"

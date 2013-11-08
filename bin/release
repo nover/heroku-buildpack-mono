@@ -6,11 +6,6 @@ BUILD_DIR=$1
 
 cat <<EOF
 ---
-EOF
-
-if [ -d "$BUILD_DIR/_PublishedWebsites/" ]; then
-    cat <<EOF
 default_process_types:
   web: /app/nginx/start
 EOF
-fi
