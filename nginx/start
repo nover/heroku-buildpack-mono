@@ -6,7 +6,8 @@ touch /app/nginx/logs/access.log /app/nginx/logs/error.log
 (tail -f -n 0 /app/nginx/logs/*.log &)
 
 # launch all mono processes
-/app/mono/bin/mono /app/*.exe
+/app/mono/bin/mono /app/*.exe &
 
 # launch nginx
+echo "launching NGINX"
 /app/nginx/nginx -p /app/nginx -c /app/nginx/nginx.conf
