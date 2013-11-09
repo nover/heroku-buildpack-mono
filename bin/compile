@@ -11,7 +11,7 @@ MONO_VERSION="3.2.3"
 NGINX_VERSION="1.5.2"
 
 # s3 packages
-MONO_PACKAGE_URL="${DEPENDENCY_S3_BUCKET_PATH}/mono-${MONO_VERSION}.tar.gz"
+MONO_PACKAGE_URL="https://s3-eu-west-1.amazonaws.com/mono-stuff/mono-3.2.3.tar.gz"
 NUGET_TARGETS_FILE_URL="${DEPENDENCY_S3_BUCKET_PATH}/vendor/NuGet/NuGet.targets"
 
 BUILD_DIR=$1
