@@ -1,3 +1,3 @@
-
+#!/usr/bin/env bash
 echo "----> Starting worker nodes"
 /app/mono/bin/mono --server /app/*.exe worker
