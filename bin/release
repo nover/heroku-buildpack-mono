@@ -7,6 +7,6 @@ BUILD_DIR=$1
 cat <<EOF
 ---
 default_process_types:
-  web: /app/mono/bin/mono --server /app/*.exe web
-  worker: /app/mono/bin/mono --server /app/*.exe worker
+  web: /app/start-web
+  worker: /app/start-worker
 EOF

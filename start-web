@@ -1,0 +1,5 @@
+# This nursery size is used by the SGen garbage collector. Larger size means it can handle more pinned objects
+# http://stackoverflow.com/questions/18464295/degraded-allocation-consider-increasing-nursery-size-if-the-warning-persists
+# http://mono.1490590.n4.nabble.com/Mono-3-1-2-on-OSX-quot-Degraded-allocations-quot-tt4660257.html#none
+echo "----> Starting web nodes"
+MONO_GC_PARAMS=nursery-size=8m /app/mono/bin/mono --server /app/*.exe web
